@@ -1,8 +1,7 @@
 name: Integration build
-on:
-  push:
-    branches:
-    - eventbased-gw
+on: 
+  workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
