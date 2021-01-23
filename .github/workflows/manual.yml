@@ -1,12 +1,16 @@
 name: Integration build
 
-on: [pull_request]
-
+on:
+  workflow_dispatch:
+   types: build-pr
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Do Something Based On Triggered Event Data
+      run: 'echo "Triggered event text: ${{ github.event.client_payload.message }}"'
+
     - name: Checkout eventbased-gw
       uses: actions/checkout@v1
       with: 
