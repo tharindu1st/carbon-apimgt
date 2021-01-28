@@ -7,9 +7,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Do Something Based On Triggered Event Data
-      run: 'echo "Triggered event text: ${{ github.event.client_payload.message }}"'
-
     - name: Checkout eventbased-gw
       uses: actions/checkout@v1
       with: 
@@ -23,6 +20,14 @@ jobs:
     - uses: actions/setup-node@v1
       with:
         node-version: '10.x'
+    - name: Cache local Maven repository
+      uses: actions/cache@v2
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          java-build
+
     - name: Build carbon-apimgt with Test.
       run: mvn clean install --file pom.xml
     - name: Get carbon.apimgt.version
