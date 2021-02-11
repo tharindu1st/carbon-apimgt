@@ -42,9 +42,10 @@ jobs:
         ref: refs/heads/proxt-api-removal
     - name: Build Product-Apim with Maven
       run: mvn clean install -Dcarbon.apimgt.version=$(cat ../CARBON_APIMGT_VERSION_FILE) -fae --file ../product-apim/pom.xml
-    - name: Pushbullet Notification
-      uses: ShaunLWM/action-pushbullet@0.0.1
-      env:
-        PB_TOKEN: ${{ secrets.PB_TOKEN }}
-        PB_TITLE: Build Complete
-        PB_TEXT: Your project has been build
+    - name: Google Chat Notification
+      uses: Co-qn/google-chat-notification@releases/v1
+      with:
+        name: Build
+        url: ${{ secrets.GOOGLE_CHAT_WEBHOOK }}
+        status: ${{ job.status }}
+      if: always()
