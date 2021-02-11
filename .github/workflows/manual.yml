@@ -11,7 +11,7 @@ jobs:
       uses: actions/checkout@v1
       with: 
         repository: tharindu1st/carbon-apimgt
-        ref: refs/heads/eventbased-gw
+        ref: refs/heads/fix
 
     - name: Set up JDK 1.8
       uses: actions/setup-java@v1
@@ -39,6 +39,6 @@ jobs:
       uses: actions/checkout@v1
       with: 
         repository: tharindu1st/product-apim
-        ref: refs/heads/gateway-deployment
+        ref: refs/heads/proxt-api-removal
     - name: Build Product-Apim with Maven
       run: mvn clean install -Dcarbon.apimgt.version=$(cat ../CARBON_APIMGT_VERSION_FILE) -fae --file ../product-apim/pom.xml
