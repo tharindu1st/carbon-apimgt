@@ -43,7 +43,7 @@ jobs:
     - name: Build Product-Apim with Maven
       run: mvn clean install -Dcarbon.apimgt.version=$(cat ../CARBON_APIMGT_VERSION_FILE) -fae --file ../product-apim/pom.xml
     - name: Pushbullet Notification
-      uses: ShaunLWM/action-pushbullet@master
+      uses: ShaunLWM/action-pushbullet@0.0.1
       env:
         PB_TOKEN: ${{ secrets.PB_TOKEN }}
         PB_TITLE: Build Complete
