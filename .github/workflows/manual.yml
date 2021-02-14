@@ -47,7 +47,7 @@ jobs:
       uses: scacap/action-surefire-report@v1.0.5
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        report_paths: "**/tests-integration/tests-backend/target/surefire-reports/*.xml"
+        report_paths: "/home/runner/work/carbon-apimgt/product-apim/modules/integration/tests-integration/tests-backend/target/surefire-reports/*.xml"
     - name: Google Chat Notification
       uses: Co-qn/google-chat-notification@releases/v1
       with:
