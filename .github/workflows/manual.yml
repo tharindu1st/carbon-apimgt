@@ -48,9 +48,20 @@ jobs:
         repository: tharindu1st/product-apim
         ref: refs/heads/test-fix
     - name: Build Product-Apim with Maven
-      run: mvn clean install -Dcarbon.apimgt.version=$(cat ../CARBON_APIMGT_VERSION_FILE) -fae --file ../product-apim/pom.xml
+      run: mvn clean install -Dcarbon.apimgt.version=$(cat ../CARBON_APIMGT_VERSION_FILE) -fae --file product-apim/pom.xml
       env:
         PRODUCT_APIM_TESTS: ${{ matrix.segment }}
+    - name: Prepare upload testng report
+      if: always()
+      run: mv product-apim/modules/integration/tests-integration/tests-backend/target/surefire-reports/TEST-TestSuite.xml TEST-TestSuite_${{ matrix.id }}.xml
+    - name: Archive testng report
+      if: always()
+      uses: actions/upload-artifact@v2
+      with:
+        name: TEST-TestSuite_${{ matrix.id }}
+        path: |
+          TEST-TestSuite_${{ matrix.id }}.xml
+        if-no-files-found: warn
     - name: Google Chat Notification
       uses: Co-qn/google-chat-notification@releases/v1
       with:
