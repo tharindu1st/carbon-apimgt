@@ -47,6 +47,7 @@ jobs:
       with: 
         repository: tharindu1st/product-apim
         ref: refs/heads/test-fix
+        path: product-apim
     - name: Build Product-Apim with Maven
       run: mvn clean install -Dcarbon.apimgt.version=$(cat ../CARBON_APIMGT_VERSION_FILE) -fae --file product-apim/pom.xml
       env:
