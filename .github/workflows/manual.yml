@@ -5,10 +5,19 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        include:
+           - id: 1
+             segment: apim-integration-tests-api-common, apim-integration-tests-api-change-endpoint, apim-integration-tests-api-product, apim-integration-tests-api-lifecycle, apim-integration-tests-api-lifecycle-2, apim-email-secondary-userstore-tests, apim-CORS-tests, apim-publisher-tests, apim-integration-tests-graphql
+           - id: 2
+             segment: apim-integration-tests-samples, apim-store-tests, admin-rest-api-tests, rest-api-tests, apim-mediation-tests, apim-integration-tests-without-restarts, apim-JWT-integration-tests, apim-urlsafe-JWT-integration-tests
+           - id: 3
+             segment: apim-integration-tests-application-sharing, apim-integration-tests-endpoint-security, apim-integration-tests-external-idp, apim-integration-emailusername-login, apim-integration-tests-workflow,apim-websocket-test
+      fail-fast: false
     steps:
     - name: Checkout status-fix-1
-      uses: actions/checkout@v1
+      uses: actions/checkout@v2
       with: 
         repository: tharindu1st/carbon-apimgt
         ref: refs/heads/status-fix-1
@@ -23,11 +32,9 @@ jobs:
     - name: Cache local Maven repository
       uses: actions/cache@v2
       with:
-        path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          java-build
-
+        path: ~/.m2
+        key: ${{ runner.os }}-m2
+        restore-keys: ${{ runner.os }}-m2
     - name: Build carbon-apimgt with Test.
       run: mvn clean install --file pom.xml
     - name: Get carbon.apimgt.version
@@ -36,12 +43,14 @@ jobs:
       run: |
         echo $(cat ../CARBON_APIMGT_VERSION_FILE)
     - name: Checkout Product-APIM
-      uses: actions/checkout@v1
+      uses: actions/checkout@v2
       with: 
         repository: tharindu1st/product-apim
         ref: refs/heads/test-fix
     - name: Build Product-Apim with Maven
       run: mvn clean install -Dcarbon.apimgt.version=$(cat ../CARBON_APIMGT_VERSION_FILE) -fae --file ../product-apim/pom.xml
+      env:
+        PRODUCT_APIM_TESTS: ${{ matrix.segment }}
     - name: Google Chat Notification
       uses: Co-qn/google-chat-notification@releases/v1
       with:
