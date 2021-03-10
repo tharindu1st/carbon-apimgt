@@ -61,6 +61,7 @@ public class TenantServiceCreator extends AbstractAxis2ConfigurationContextObser
     private String mainSequenceName = "main";
     private String corsSequenceName = "_cors_request_handler_";
     private String threatFaultSequenceName = "_threat_fault_";
+    private String backendFailureSequenceName = "_backend_failure_handler_";
     private String webSocketInboundEp = "WebSocketInboundEndpoint";
     private String securedWebSocketInboundEp = "SecureWebSocketInboundEndpoint";
     private String webHookServerHTTP = "WebhookServer";
@@ -147,8 +148,16 @@ public class TenantServiceCreator extends AbstractAxis2ConfigurationContextObser
                                 MultiXMLConfigurationBuilder.SEQUENCES_DIR + File.separator +
                                 blockingSequence + ".xml"));
             }
-        } catch (RemoteException e) {
-            log.error("Failed to create Tenant's synapse sequences.", e);
+            String backEndFailureSequence = synapseConfigsDir.getAbsolutePath() + File.separator +
+                    manger.getTracker().getCurrentConfigurationName() + File.separator +
+                    MultiXMLConfigurationBuilder.SEQUENCES_DIR + File.separator + backendFailureSequenceName + ".xml";
+            File backendSequenceXml = new File(backEndFailureSequence);
+            if (!backendSequenceXml.exists()) {
+                FileUtils.copyFile(new File(synapseConfigRootPath + backendFailureSequenceName + ".xml"),
+                        new File(synapseConfigDir.getAbsolutePath() + File.separator +
+                                MultiXMLConfigurationBuilder.SEQUENCES_DIR + File.separator +
+                                backendFailureSequenceName + ".xml"));
+            }
         } catch (Exception e) {
             log.error("Failed to create Tenant's synapse sequences.", e);
         }
