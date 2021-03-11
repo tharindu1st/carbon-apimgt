@@ -70,3 +70,16 @@ jobs:
         url: ${{ secrets.GOOGLE_CHAT_WEBHOOK }}
         status: ${{ job.status }}
       if: always()
+  show-report:
+    if: always()
+    needs: build
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          path: reports
+      - name: Publish Test Report
+        if: always()
+        uses: malinthaprasan/action-surefire-report@v1
+        with:
+          report_paths: 'reports/**/TEST-*.xml'
