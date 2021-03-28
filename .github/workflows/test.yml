@@ -4,10 +4,10 @@ on:
   pull_request:
     branches:
       - gitaction
-    paths:
-     - '!**/org.wso2.carbon.apimgt.admin.feature/src/main/resources/admin/**'
-     - '!**/org.wso2.carbon.apimgt.publisher.feature/src/main/resources/publisher/**'
-     - '!**/org.wso2.carbon.apimgt.store.feature/src/main/resources/devportal/**'
+    paths-ignore:
+     - '**/org.wso2.carbon.apimgt.admin.feature/src/main/resources/admin/**'
+     - '**/org.wso2.carbon.apimgt.publisher.feature/src/main/resources/publisher/**'
+     - '**/org.wso2.carbon.apimgt.store.feature/src/main/resources/devportal/**'
   workflow_dispatch:
     branches:
       - gitaction
