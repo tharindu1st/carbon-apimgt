@@ -1,4 +1,4 @@
-name: API Manager Build with Test
+name: Test Build
 
 on:
   pull_request:
