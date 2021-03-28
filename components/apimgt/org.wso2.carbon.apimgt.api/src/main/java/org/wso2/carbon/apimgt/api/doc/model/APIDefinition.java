@@ -1,7 +1,8 @@
 package org.wso2.carbon.apimgt.api.doc.model;
 
 import java.util.List;
-
+/**
+**/
 public class APIDefinition {
 	
 	private String apiVersion;
