@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * APIAdmin responsible for providing helper functionality
+ * APIAdmin responsible for providing helper functionality.
  */
 public interface APIAdmin  {
     /**
