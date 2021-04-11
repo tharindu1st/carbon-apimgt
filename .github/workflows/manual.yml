@@ -37,7 +37,7 @@ jobs:
         ref: refs/heads/${{ github.event.inputs.component_branch }}
 
     - name: Set up JDK 1.8
-    - uses: actions/setup-java@v2
+      uses: actions/setup-java@v2
       with:
         distribution: 'adopt' # See 'Supported distributions' for available options
         java-version: 8
