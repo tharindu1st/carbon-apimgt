@@ -39,7 +39,7 @@ jobs:
     - name: maven-settings-action
       uses: s4u/maven-settings-action@v2.4.0
       with:
-        mirrors: '[{ "id": "maven-default-http-blocker", "mirrorOf": "external:http:*", "url": "Pseudo repository to mirror external repositories initially using HTTP.","blocked": }]'
+        mirrors: '[{ "id": "maven-default-http-blocker", "mirrorOf": "external:http:*", "url": "Pseudo repository to mirror external repositories initially using HTTP.","blocked": false }]'
     - name: Run hostname
       run: hostname
     - name: Fix host entry
