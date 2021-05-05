@@ -36,10 +36,6 @@ jobs:
             segment: apim-websocket-tests,apim-integration-tests-application-sharing,apim-integration-tests-endpoint-security,apim-integration-emailusername-login
       fail-fast: false
     steps:
-    - name: maven-settings-action
-      uses: s4u/maven-settings-action@v2.4.0
-      with:
-        mirrors: '[{ "id": "maven-default-http-blocker", "mirrorOf": "external:http:*", "url": "Pseudo repository to mirror external repositories initially using HTTP.","blocked": false }]'
     - name: Run hostname
       run: hostname
     - name: Fix host entry
@@ -57,6 +53,10 @@ jobs:
       with:
         distribution: 'adopt' # See 'Supported distributions' for available options
         java-version: 8
+    - name: Set up Maven
+      uses: aahmed-se/setup-maven@v3
+      with:
+       maven-version: 3.6.3
     - uses: actions/setup-node@v1
       with:
         node-version: '10.x'
