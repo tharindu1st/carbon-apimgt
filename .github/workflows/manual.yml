@@ -53,11 +53,8 @@ jobs:
       with:
         distribution: 'adopt' # See 'Supported distributions' for available options
         java-version: 8
-    - name: Set up Maven
-      uses: aahmed-se/setup-maven@v3
-      with:
-       maven-version: 3.6.3
-    - uses: actions/setup-node@v1
+    - name: Set up Node
+      uses: actions/setup-node@v1
       with:
         node-version: '10.x'
     - name: Cache local Maven repository
