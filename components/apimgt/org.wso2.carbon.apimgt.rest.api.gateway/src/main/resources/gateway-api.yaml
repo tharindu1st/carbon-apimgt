@@ -328,11 +328,122 @@ paths:
             source: 'curl -k "https://127.0.0.1:9443/api/am/gateway/v2/subscriptions?apiUUID=c43a325c-260b-4302-81cb-768eafaa3aed&applicationUUID=c43a325c-260b-4302-81cb-768eafaa3aed&tenantDomain=registry.com"
             -H "Authorization: Basic YWRtaW46YWRtaW4="'
 
+  /apis:
+
+    #-----------------------------------------------------
+    # Get APIS.
+    #-----------------------------------------------------
+    get:
+      summary: Get API Metadata stored in in-memory
+      description: |
+        This operation is used to get the API Metadata from the storage. If the Tenant domain is not provided
+        carbon.super will be picked as the Tenant domain.
+      operationId: getAPIS
+      parameters:
+        - $ref: '#/parameters/apiName'
+        - $ref: '#/parameters/context'
+        - $ref: '#/parameters/version'
+        - $ref: '#/parameters/tenantDomain'
+      responses:
+        200:
+          description: |
+            OK.
+            API Metadata successfully Retrieved From the Storage.
+          schema:
+            $ref: '#/definitions/SubscriptionList'
+        400:
+          description: |
+            Bad Request.
+            Invalid request or validation error
+          schema:
+            $ref: '#/definitions/Error'
+        404:
+          description: |
+            Not Found.
+            Requested API does not exist.
+          schema:
+            $ref: '#/definitions/Error'
+        x-code-samples:
+          - lang: Curl
+            source: 'curl -k "https://127.0.0.1:9443/api/am/gateway/v2/subscriptions?apiUUID=c43a325c-260b-4302-81cb-768eafaa3aed&applicationUUID=c43a325c-260b-4302-81cb-768eafaa3aed&tenantDomain=registry.com"
+            -H "Authorization: Basic YWRtaW46YWRtaW4="'
+
+
+  /applications:
+
+    #-----------------------------------------------------
+    # Get Applications.
+    #-----------------------------------------------------
+    get:
+      summary: Get Application Metadata stored in in-memory
+      description: |
+        This operation is used to get the Application Metadata from the storage. If the Tenant domain is not provided
+        carbon.super will be picked as the Tenant domain.
+      operationId: getAPIS
+      parameters:
+        - $ref: '#/parameters/applicationName'
+        - $ref: '#/parameters/applicationOwner'
+        - $ref: '#/parameters/applicationUUID'
+        - $ref: '#/parameters/tenantDomain'
+      responses:
+        200:
+          description: |
+            OK.
+            Application Metadata successfully Retrieved From the Storage.
+          schema:
+            $ref: '#/definitions/ApplicationList'
+        400:
+          description: |
+            Bad Request.
+            Invalid request or validation error
+          schema:
+            $ref: '#/definitions/Error'
+        404:
+          description: |
+            Not Found.
+            Requested Application does not exist.
+          schema:
+            $ref: '#/definitions/Error'
+        x-code-samples:
+          - lang: Curl
+            source: 'curl -k "https://127.0.0.1:9443/api/am/gateway/v2/subscriptions?apiUUID=c43a325c-260b-4302-81cb-768eafaa3aed&applicationUUID=c43a325c-260b-4302-81cb-768eafaa3aed&tenantDomain=registry.com"
+            -H "Authorization: Basic YWRtaW46YWRtaW4="'
+
 ######################################################
 # Parameters - required by some of the APIs above
 ######################################################
 parameters:
 
+  # API Context
+  # Specified as part of the query string
+  context:
+    name: context
+    in: query
+    description: |
+      Context of the API
+    type: string
+    required: false
+
+  # Application Name
+  # Specified as part of the query string
+  applicationName:
+    name: name
+    in: query
+    description: |
+      name of the Application
+    type: string
+    required: false
+
+  # Application Owner
+  # Specified as part of the query string
+  applicationOwner:
+    name: owner
+    in: query
+    description: |
+      Owner of the Application
+    type: string
+    required: false
+    
   # API name
   # Specified as part of the query string
   apiName:
@@ -548,6 +659,135 @@ definitions:
         type: integer
       subscriptionState:
         type: string
+
+  #-----------------------------------------------------
+  # The API List resource
+  #-----------------------------------------------------
+  APIList:
+    title: API List
+    properties:
+      count:
+        type: integer
+        description: |
+          Number of APIs returned.
+        example: 1
+      list:
+        type: array
+        items:
+          $ref: '#/definitions/API'
+  #-----------------------------------------------------
+  # The API resource
+  #-----------------------------------------------------
+  API:
+    properties:
+      uuid:
+        type: string
+        description: UUID of API
+      apiId:
+        type: integer
+      provider:
+        type: string
+        description: API Provider name.
+      name:
+        type: string
+        description: Name of the API
+      version:
+        type: string
+        description: Version of the API.
+      context:
+        type: string
+        description: Context of the API.
+      policy:
+        type: string
+        description: API level throttling policy.
+      apiType:
+        type: string
+        description: Type of the API.
+        example: APIProduct
+      status:
+        type: string
+        description: Type of the API.
+        example: APIProduct
+      isDefaultVersion:
+        type: boolean
+        description: Whether this is the default version of the API.
+        example: false
+      urlMappings:
+        type: array
+        items:
+          $ref: '#/definitions/URLMapping'
+
+  #-----------------------------------------------------
+  # The URL Mapping resource
+  #-----------------------------------------------------
+  URLMapping:
+    properties:
+      authScheme:
+        type: string
+      throttlingPolicy:
+        type: string
+      httpMethod:
+        type: string
+      urlPattern:
+        type: string
+      scopes:
+        type: array
+        items:
+          type: string
+
+  #-----------------------------------------------------
+  # The Application List resource
+  #-----------------------------------------------------
+  ApplicationList:
+    title: Application List
+    properties:
+      count:
+        type: integer
+        description: |
+          Number of Applications returned.
+        example: 1
+      list:
+        type: array
+        items:
+          $ref: '#/definitions/Application'
+  #-----------------------------------------------------
+  # The Application resource
+  #-----------------------------------------------------
+  Application:
+    properties:
+      uuid:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      subName:
+        type: string
+      policy:
+        type: string
+        description: Application level throtting policy.
+      groupIds:
+        type: array
+        items:
+          $ref: '#/definitions/GroupId'
+        description: group ids associated with the application.
+        example: wso2
+      attributes:
+        type: object
+        additionalProperties:
+          type: string
+
+
+  #-----------------------------------------------------
+  # The Application Attribute resource
+  #-----------------------------------------------------
+  GroupId:
+    title: Application Group Id
+    properties:
+      groupId:
+        type: string
+      applicationId:
+        type: integer
 
 #-----------------------------------------------------
 # END-OF-FILE
