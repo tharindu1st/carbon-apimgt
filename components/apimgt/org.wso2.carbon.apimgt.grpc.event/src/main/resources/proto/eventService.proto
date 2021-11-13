@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package eventService;
+
+option java_multiple_files = true;
+option java_package = "org.wso2.carbon.apimgt.grpc.event";
+option java_outer_classname = "EventServiceProto";
+option objc_class_prefix = "RTG";
+import "google/protobuf/empty.proto";
+
+service EventService {
+
+  rpc push(stream Event) returns (google.protobuf.Empty) {}
+}
+message Event {
+   bytes payload = 1;
+}

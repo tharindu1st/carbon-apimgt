@@ -11,6 +11,7 @@ import org.apache.synapse.core.axis2.Axis2MessageContext;
 import org.apache.synapse.rest.RESTConstants;
 import org.apache.synapse.transport.passthru.util.RelayUtils;
 import org.json.simple.JSONObject;
+import org.wso2.carbon.apimgt.api.APIManagementException;
 import org.wso2.carbon.apimgt.common.gateway.util.JWTUtil;
 import org.wso2.carbon.apimgt.gateway.handlers.security.AuthenticationContext;
 import org.wso2.carbon.apimgt.gateway.handlers.throttling.APIThrottleConstants;
@@ -45,7 +46,7 @@ public class DataProcessAndPublishingAgent implements Runnable {
 
     private static String streamID = "org.wso2.throttle.request.stream:1.0.0";
     private MessageContext messageContext;
-    private DataPublisher dataPublisher;
+    private Publisher dataPublisher;
 
 
 
@@ -283,7 +284,11 @@ public class DataProcessAndPublishingAgent implements Runnable {
                                         this.appTenant, this.apiTenant, this.appId, this.apiName, jsonObMap.toString()};
         org.wso2.carbon.databridge.commons.Event event = new org.wso2.carbon.databridge.commons.Event(streamID,
                                                                                                       System.currentTimeMillis(), null, null, objects);
-        dataPublisher.tryPublish(event);
+        try {
+            dataPublisher.publish(event);
+        } catch (APIManagementException e) {
+            log.error("Error while publishing data", e);
+        }
     }
 
     protected void buildMessage(org.apache.axis2.context.MessageContext axis2MessageContext) throws IOException,
@@ -294,7 +299,7 @@ public class DataProcessAndPublishingAgent implements Runnable {
     protected ThrottleProperties getThrottleProperties() {
         return ServiceReferenceHolder.getInstance().getThrottleProperties();
     }
-    protected DataPublisher getDataPublisher() {
+    protected Publisher getDataPublisher() {
         return ThrottleDataPublisher.getDataPublisher();
     }
 }

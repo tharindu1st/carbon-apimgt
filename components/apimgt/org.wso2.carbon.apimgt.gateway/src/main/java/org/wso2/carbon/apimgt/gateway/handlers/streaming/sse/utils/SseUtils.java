@@ -21,10 +21,12 @@ package org.wso2.carbon.apimgt.gateway.handlers.streaming.sse.utils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONObject;
+import org.wso2.carbon.apimgt.api.APIManagementException;
 import org.wso2.carbon.apimgt.gateway.handlers.streaming.sse.throttling.ThrottleInfo;
 import org.wso2.carbon.apimgt.gateway.handlers.security.AuthenticationContext;
 import org.wso2.carbon.apimgt.gateway.internal.ServiceReferenceHolder;
 import org.wso2.carbon.apimgt.gateway.throttling.ThrottleDataHolder;
+import org.wso2.carbon.apimgt.gateway.throttling.publisher.Publisher;
 import org.wso2.carbon.apimgt.gateway.throttling.publisher.ThrottleDataPublisher;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.databridge.agent.DataPublisher;
@@ -88,9 +90,14 @@ public class SseUtils {
         ThrottleDataPublisher throttleDataPublisher = ServiceReferenceHolder.getInstance().getThrottleDataPublisher();
         if (throttleDataPublisher != null) {
             int count = 1;
-            DataPublisher publisher = ThrottleDataPublisher.getDataPublisher();
+            Publisher publisher = ThrottleDataPublisher.getDataPublisher();
             while (count <= eventCount) {
-                publisher.tryPublish(event);
+                try {
+                    publisher.publish(event);
+                } catch (APIManagementException e) {
+                    log.error("Cannot publish events to traffic manager because ThrottleDataPublisher "
+                            + "has not been initialised");
+                }
                 count++;
             }
         } else {

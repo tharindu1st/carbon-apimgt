@@ -22,6 +22,7 @@ package org.wso2.carbon.apimgt.gateway.throttling.publisher;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.synapse.MessageContext;
+import org.wso2.carbon.apimgt.api.APIManagementException;
 import org.wso2.carbon.apimgt.gateway.handlers.security.AuthenticationContext;
 import org.wso2.carbon.apimgt.gateway.internal.ServiceReferenceHolder;
 import org.wso2.carbon.apimgt.impl.dto.ThrottleProperties;
@@ -49,11 +50,11 @@ public class ThrottleDataPublisher {
 
     public static final Log log = LogFactory.getLog(ThrottleDataPublisher.class);
 
-    public static DataPublisher getDataPublisher() {
-        return dataPublisher;
+    public static Publisher getDataPublisher() {
+        return publisher;
     }
 
-    private static volatile DataPublisher dataPublisher = null;
+    private static Publisher publisher = null;
 
     Executor executor;
 
@@ -72,17 +73,25 @@ public class ThrottleDataPublisher {
                         .getInstance().getThrottleProperties().getDataPublisherThreadPool();
 
                 try {
-                    executor = new DataPublisherThreadPoolExecutor(dataPublisherThreadPoolConfiguration.getCorePoolSize(),
-                            dataPublisherThreadPoolConfiguration.getMaximumPoolSize(), dataPublisherThreadPoolConfiguration
+                    executor =
+                            new DataPublisherThreadPoolExecutor(dataPublisherThreadPoolConfiguration.getCorePoolSize(),
+                            dataPublisherThreadPoolConfiguration.getMaximumPoolSize(),
+                                    dataPublisherThreadPoolConfiguration
                             .getKeepAliveTime(),
                             TimeUnit
                                     .SECONDS,
                             new LinkedBlockingDeque<Runnable>() {
                             });
-                    dataPublisher = new DataPublisher(dataPublisherConfiguration.getType(), dataPublisherConfiguration
-                            .getReceiverUrlGroup(), dataPublisherConfiguration.getAuthUrlGroup(), dataPublisherConfiguration
-                            .getUsername(),
-                            dataPublisherConfiguration.getPassword());
+                    if (!"GRPC".equals(dataPublisherConfiguration.getType())) {
+                        DataPublisher dataPublisher = new DataPublisher(dataPublisherConfiguration.getType(),
+                                dataPublisherConfiguration.getReceiverUrlGroup(),
+                                dataPublisherConfiguration.getAuthUrlGroup(),
+                                dataPublisherConfiguration.getUsername(),
+                                dataPublisherConfiguration.getPassword());
+                        publisher = new BinaryDataPublisher(dataPublisher);
+                    } else {
+                        publisher = new GRPCPublisher("localhost", 9553);
+                    }
 
                 } catch (DataEndpointAgentConfigurationException e) {
                     log.error("Error in initializing binary data-publisher to send requests to global throttling engine " +
@@ -99,6 +108,8 @@ public class ThrottleDataPublisher {
                 } catch (TransportException e) {
                     log.error("Error in initializing binary data-publisher to send requests to global throttling engine " +
                             e.getMessage(), e);
+                } catch (APIManagementException e) {
+                    log.error("Error in initializing publisher", e);
                 }
             }
         }

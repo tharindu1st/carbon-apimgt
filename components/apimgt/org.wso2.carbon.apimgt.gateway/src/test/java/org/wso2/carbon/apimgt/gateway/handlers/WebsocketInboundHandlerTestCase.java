@@ -45,6 +45,7 @@ import org.wso2.carbon.apimgt.gateway.handlers.security.APISecurityUtils;
 import org.wso2.carbon.apimgt.gateway.handlers.streaming.websocket.WebSocketApiException;
 import org.wso2.carbon.apimgt.gateway.handlers.streaming.websocket.WebSocketUtils;
 import org.wso2.carbon.apimgt.gateway.internal.ServiceReferenceHolder;
+import org.wso2.carbon.apimgt.gateway.throttling.publisher.Publisher;
 import org.wso2.carbon.apimgt.gateway.throttling.publisher.ThrottleDataPublisher;
 import org.wso2.carbon.apimgt.gateway.utils.APIMgtGoogleAnalyticsUtils;
 import org.wso2.carbon.apimgt.impl.APIConstants;
@@ -157,7 +158,7 @@ public class WebsocketInboundHandlerTestCase {
         Mockito.when(cacheBuilder.setStoreByValue(false)).thenReturn(cacheBuilder);
         Mockito.when(cacheBuilder.build()).thenReturn(gatewayCache);
         PowerMockito.mockStatic(ThrottleDataPublisher.class);
-        DataPublisher dataPublisher = Mockito.mock(DataPublisher.class);
+        Publisher dataPublisher = Mockito.mock(Publisher.class);
         PowerMockito.when(ThrottleDataPublisher.getDataPublisher()).thenReturn(dataPublisher);
         PowerMockito.mockStatic(WebsocketUtil.class);
 

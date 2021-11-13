@@ -468,7 +468,11 @@ public class WebsocketInboundHandler extends ChannelInboundHandlerAdapter {
                               + "has not been initialised");
             return true;
         }
-        ServiceReferenceHolder.getInstance().getThrottleDataPublisher().getDataPublisher().tryPublish(event);
+        try {
+            ServiceReferenceHolder.getInstance().getThrottleDataPublisher().getDataPublisher().publish(event);
+        } catch (APIManagementException e) {
+            log.error("Error while publishing throttle data", e);
+        }
         return true;
     }
 

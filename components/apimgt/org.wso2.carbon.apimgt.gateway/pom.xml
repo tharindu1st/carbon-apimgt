@@ -320,6 +320,14 @@
             <groupId>org.wso2.carbon.apimgt</groupId>
             <artifactId>org.wso2.carbon.apimgt.common.analytics</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.wso2.io.grpc</groupId>
+            <artifactId>grpc-all</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.apimgt</groupId>
+            <artifactId>org.wso2.carbon.apimgt.grpc.event</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -461,6 +469,7 @@
                             com.amazonaws.*; version="${com.amazonaws.version}",
                             org.apache.servicemix.bundles.jedis.*; version="${servicemix.bundles.jedis.version}",
                             com.nimbusds.jwt.*,
+                            io.grpc.*,
                             org.apache.commons.codec.*,
                             org.wso2.carbon.apimgt.common.gateway.*,
                             org.wso2.carbon.apimgt.common.jms.*,

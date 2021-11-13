@@ -42,8 +42,8 @@ public class DataProcessAndPublishingAgentWrapper extends DataProcessAndPublishi
     }
 
     @Override
-    protected DataPublisher getDataPublisher() {
-        return Mockito.mock(DataPublisher.class);
+    protected Publisher getDataPublisher() {
+        return Mockito.mock(Publisher.class);
     }
 
     @Override
