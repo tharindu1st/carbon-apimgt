@@ -59,9 +59,9 @@ jobs:
         key: ${{ runner.os }}-m2
         restore-keys: ${{ runner.os }}-m2
     - name: Build carbon-apimgt with Test.
-      run: mvn clean install --file pom.xml
+      run: mvn clean install --file carbon-apimgt/pom.xml
     - name: Get carbon.apimgt.version
-      run: mvn help:evaluate -Dexpression=project.version -q -DforceStdout > ../CARBON_APIMGT_VERSION_FILE
+      run: mvn help:evaluate -Dexpression=project.version -q --file carbon-apimgt/pom.xml -DforceStdout > ../CARBON_APIMGT_VERSION_FILE
     - name: Print carbon.apimgt.version
       run: |
         echo $(cat ../CARBON_APIMGT_VERSION_FILE)
@@ -118,8 +118,9 @@ jobs:
     - name: Checkout module-refactor
       uses: actions/checkout@v2
       with: 
-        repository: ${{ github.event.inputs.component_repo_owner }}/carbon-apimgt
+        repository: ${{ github.event.inputs.component_repo }}
         ref: refs/heads/${{ github.event.inputs.component_branch }}
+        path: carbon-apimgt
 
     - name: Set up JDK 1.8
       uses: actions/setup-java@v2
@@ -137,9 +138,9 @@ jobs:
         key: ${{ runner.os }}-m2
         restore-keys: ${{ runner.os }}-m2
     - name: Build carbon-apimgt with Test.
-      run: mvn clean install --file pom.xml
+      run: mvn clean install --file carbon-apimgt/pom.xml -Dmaven.test.skip=true
     - name: Get carbon.apimgt.version
-      run: mvn help:evaluate -Dexpression=project.version -q -DforceStdout > ../CARBON_APIMGT_VERSION_FILE
+      run: mvn help:evaluate -Dexpression=project.version --file carbon-apimgt/pom.xml -q -DforceStdout > ../CARBON_APIMGT_VERSION_FILE
     - name: Print carbon.apimgt.version
       run: |
         echo $(cat ../CARBON_APIMGT_VERSION_FILE)
