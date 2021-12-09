@@ -39,7 +39,7 @@ jobs:
     - name: Checkout module-refactor
       uses: actions/checkout@v2
       with: 
-        repository: ${{ github.event.inputs.component_repo_owner }}
+        repository: ${{ github.event.inputs.component_repo }}
         ref: refs/heads/${{ github.event.inputs.component_branch }}
         path: carbon-apimgt
         
@@ -68,7 +68,7 @@ jobs:
     - name: Checkout Product-APIM
       uses: actions/checkout@v2
       with: 
-        repository: ${{ github.event.inputs.product_repo_owner }}
+        repository: ${{ github.event.inputs.product_repo }}
         ref: refs/heads/${{ github.event.inputs.product_branch }}
         path: product-apim
     - name: Build Product-Apim with Maven
