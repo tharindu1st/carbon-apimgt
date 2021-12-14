@@ -147,7 +147,7 @@ jobs:
     - name: Checkout Product-APIM
       uses: actions/checkout@v2
       with: 
-        repository: ${{ github.event.inputs.product_repo_owner }}/product-apim
+        repository: ${{ github.event.inputs.product_repo }}
         ref: refs/heads/${{ github.event.inputs.product_branch }}
         path: product-apim
     - name: Build Product-Apim with Maven
