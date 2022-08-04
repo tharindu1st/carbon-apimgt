@@ -1926,6 +1926,9 @@
          -->
         <sonar.organization>tharindu1st</sonar.organization>
         <sonar.projectKey>tharindu1st_carbon-apimgt</sonar.projectKey>
+        <sonar.moduleKey>
+            ${project.groupId}:${project.artifactId}
+        </sonar.moduleKey>
         <project.scm.id>scm-server</project.scm.id>
 
         <!-- File encoding of build -->
