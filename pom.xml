@@ -1919,6 +1919,13 @@
     </dependencyManagement>
 
     <properties>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <!--
+        The two following properties are displayed on your project
+        at https://sonarcloud.io
+         -->
+        <sonar.organization>tharindu1st</sonar.organization>
+        <sonar.projectKey>tharindu1st_carbon-apimgt</sonar.projectKey>
         <project.scm.id>scm-server</project.scm.id>
 
         <!-- File encoding of build -->
