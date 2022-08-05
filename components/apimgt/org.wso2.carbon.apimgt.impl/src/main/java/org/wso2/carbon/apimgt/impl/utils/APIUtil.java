@@ -370,6 +370,7 @@ public final class APIUtil {
 
     }
 
+
     //Need tenantIdleTime to check whether the tenant is in idle state in loadTenantConfig method
     static {
         tenantIdleTimeMillis =
