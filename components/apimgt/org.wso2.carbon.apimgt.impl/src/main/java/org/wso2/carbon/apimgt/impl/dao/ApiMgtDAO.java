@@ -5361,8 +5361,6 @@ public class ApiMgtDAO {
                 log.error("Failed to rollback the add API: " + api.getId(), ex);
             }
             handleException("Error while adding the API: " + api.getId() + " to the database", e);
-        } finally {
-            APIMgtDBUtil.closeAllConnections(prepStmt, connection, rs);
         }
         return apiId;
     }
