@@ -59,7 +59,7 @@ jobs:
         key: ${{ runner.os }}-m2
         restore-keys: ${{ runner.os }}-m2
     - name: Build carbon-apimgt with Test.
-      run: mvn clean install --file carbon-apimgt/pom.xml
+      run: mvn clean install -Dmaven.test.skip=true --file carbon-apimgt/pom.xml
     - name: Get carbon.apimgt.version
       run: mvn help:evaluate -Dexpression=project.version -q --file carbon-apimgt/pom.xml -DforceStdout > ../CARBON_APIMGT_VERSION_FILE
     - name: Print carbon.apimgt.version
