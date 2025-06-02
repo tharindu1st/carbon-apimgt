@@ -66,14 +66,6 @@ jobs:
             segment: group4
       fail-fast: false
     steps:
-      - name: Install Maven 3.6.3
-        run: |
-          curl -fsSL https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.zip -o maven.zip
-          unzip -q maven.zip -d $HOME
-          echo "MAVEN_HOME=$HOME/apache-maven-3.6.3" >> $GITHUB_ENV
-          echo "$HOME/apache-maven-3.6.3/bin" >> $GITHUB_PATH
-      - name: Verify Maven version
-        run: mvn -version
       - name: Run hostname
         run: hostname
       - name: Fix host entry
@@ -89,15 +81,14 @@ jobs:
         with:
           java-version: 11.0.24
           distribution: 'temurin'
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '14.x'
-      - name: Cache maven packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2
-          restore-keys: ${{ runner.os }}-m2
+      - name: Install Maven 3.6.3
+        run: |
+          curl -fsSL https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.zip -o maven.zip
+          unzip -q maven.zip -d $HOME
+          echo "MAVEN_HOME=$HOME/apache-maven-3.6.3" >> $GITHUB_ENV
+          echo "$HOME/apache-maven-3.6.3/bin" >> $GITHUB_PATH
+      - name: Verify Maven version
+        run: mvn -version
       - name: Build carbon-apimgt without tests, skip AspectJ, skip portal builds
         run: mvn clean install --file pom.xml -Dmaven.test.skip=true -Dskip.aspectj=true -Dnpm.build.skip=true
       - name: Get carbon.apimgt.version
